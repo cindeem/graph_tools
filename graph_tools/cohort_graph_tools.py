@@ -188,7 +188,7 @@ def gen_node_colors(modules):
 
 
 
-def plot_weighted_graph(G, outdir, dim = 'xy', node_colors = None, title='graph'):
+def plot_weighted_graph(G, dim = 'xy', node_colors = None, title='graph'):
     """docstring for plot_weighted_graph"""
     aal_90, labels = parse_aal(dim)
     if node_colors is None:
