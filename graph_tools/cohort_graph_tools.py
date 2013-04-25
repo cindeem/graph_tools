@@ -89,7 +89,7 @@ def boot_corrected_graph(indata, nreps = 1000, pthr = .001, alpha = .01):
 
 
 
-def plot_cohort_map(mask, outdir, other = None):
+def plot_cohort_map(mask, other = None):
     """ plots N X N connectivity map in outdir
     if other is another N X N map, will plot side by side"""
     
@@ -105,9 +105,7 @@ def plot_cohort_map(mask, outdir, other = None):
     plt.imshow(mask, cmap= plt.cm.binary_r, interpolation='none')
     plt.title('Connectivity')
     plt.colorbar()
-    outf = os.path.join(outdir, 'connectivity_plot.png')
-    plt.savefig(outf)
-
+    plt.show()
 
 def calc_modularity(inmat,  ideal_cost = 0.1):
     """

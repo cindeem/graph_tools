@@ -7,12 +7,33 @@ will return a estimate to use for a weighted graph, along with a thresholded mas
 
 """
 import os, sys
+import time
 import numpy as np
 import argparse
 sys.path.insert(0, '/home/jagust/graph/scripts/graph_tools/graph_tools')
 import cohort_graph_tools as cgt
 
+def boot_main(indata, outd, nperms=1000, pval=.001, alpha=.01):
+    """docstring for boot_main"""
+    mask, boot_correl = cgt.boot_corrected_graph(indata,
+                                                 nreps=nperms,
+                                                 pval = pval,
+                                                 alpha = alpha)
+    
+    currtime = time.strftime('%Y-%m-%d-%H-%M')
+    fname = '_'.join(['bootstrap_thresholded', '%04d'%nperms, 
+                      'pval%s'%pval, 'alpha%s'%alpha,
+                      currtime, '.npy'])
+    outmask = os.path.join(outd, 
+                           fname.replace('thresholded', 'thresholded_mask'))
+    np.save(outmask, mask)
+    outdat = os.path.join(outd, 
+                          fname.replace('thresholded', 'thresholded_correl'))
+    np.save(outdat, boot_correl)
+    cgt.plot_chohort_map(mask, other = boot_correl)
+    print 'saved', outmask, outdat
 
+    
 
 if __name__ == '__main__':
 
@@ -21,7 +42,7 @@ if __name__ == '__main__':
 
     parser.add_argument('infile', type=str, nargs = 1,
                         help = "numpy file holding cohort connectivity\
-                                matricies"
+                                matricies")
 
     parser.add_argument('-o', type=str, dest='outd',
                         help='Directory to save new matrix\
@@ -39,29 +60,13 @@ if __name__ == '__main__':
         parser.print_help()
     else:
         args = parser.parse_args()
+        if args.outd is None:
+            args.outd, _  = os.path.split(args.infile)
+
         print args
-
-
-datdir = '/home/jagust/UCSF/Manja_Lehmann/ICN/rsfMRI_in_AD/data/extended_cohort_30controls_49AD/graph_theory/Controls'
-correlations = os.path.join(datdir, 'Controls_unmasked_data_fisher.npy')
-mat = np.load(correlations)
-
-np.random.seed()
-resampled = np.zeros((1000, 90, 90))
-resamp_pvals = np.zeros((1000, 90, 90))
-for i in np.arange(1000):
-    indicies = np.random.randint(0,29,30)
-    mean = mat[0,indicies,:,:].mean(axis=0)
-    tval, pval = ttest_1samp(mat[0,indicies,:,:], 0, axis=0)
-    resampled[i, : :] = mean
-    resamp_pvals[i,:,:] = pval
-
-boot_correl = resampled.mean(0)
-boot_pvals = resamp_pvals.mean(0)
-
-mask = np.zeros(boot_correl.shape)
-mask[boot_pvals <=.001] = 1
-mask[boot_correl < 0] = 0
-
+        boot_main(args.indata, args.outd, 
+                  nperms=args.nperm, 
+                  pval= args.pval, 
+                  alpha= args.alpha)
 
 
