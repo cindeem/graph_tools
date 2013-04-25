@@ -51,10 +51,20 @@ def calc_sparsity(mask):
     return mask.sum().astype(float) / mask.flatten().shape[0]
 
 
-def boot_corrected_graph(indata, nreps = 1000, alpha = .01):
+def boot_corrected_graph(indata, nreps = 1000, pthr = .001, alpha = .01):
     """Uses bootstrapping to generate mask, correct for
     multiple comparisons and give robust estimate for 
-    cohort"""
+    cohort
+    Parameters
+    ----------
+    indata : file
+        numpy file holding connectivity data
+    nreps : int
+        number of bootstrap permutations
+    pthr : float
+        sig nificant p-value for individual tests (default .001)
+    alpha : float
+        threshold for multiple comparison (default .01)"""
     mat = np.load(indata).squeeze() # remove singular dims
     np.random.seed()
     nsub, nnode, _ = mat.shape
@@ -70,7 +80,7 @@ def boot_corrected_graph(indata, nreps = 1000, alpha = .01):
     boot_correl = resampled.mean(0)
     # significance is at .001, correction at alpha
 
-    mask = resamp_pvals <= .001
+    mask = resamp_pvals <= pthr
     mask = mask.sum(0) / np.float(nreps)
     mask[mask < 1-alpha] = 0
     mask[mask >= 1-alpha] = 1

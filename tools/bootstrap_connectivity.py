@@ -1,5 +1,4 @@
-
-
+#!/usr/bin/env python
 
 """ Use boot strapping to take a cohort of subjects with individual network adjacent matricies, and with resampling,
 estimate a cohort mean, and significance for connection between each set of regions
@@ -7,9 +6,41 @@ estimate a cohort mean, and significance for connection between each set of regi
 will return a estimate to use for a weighted graph, along with a thresholded mask for calculating modularity.
 
 """
-import os
+import os, sys
 import numpy as np
-from scipy.stats import ttest_1samp
+import argparse
+sys.path.insert(0, '/home/jagust/graph/scripts/graph_tools/graph_tools')
+import cohort_graph_tools as cgt
+
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(
+            description = 'Generate thresholded cohort map')
+
+    parser.add_argument('infile', type=str, nargs = 1,
+                        help = "numpy file holding cohort connectivity\
+                                matricies"
+
+    parser.add_argument('-o', type=str, dest='outd',
+                        help='Directory to save new matrix\
+                              (default same as input)')
+    parser.add_argument('-nperm', type = int, dest = 'nperm', default = 1000,
+                        help = 'Number of bootstrap permutations\
+                                (default 1000)')
+    parser.add_argument('-pval', type = float, dest = 'pval', default = .001,
+                        help='pval considered significant\
+                             (dafault .001)')
+    parser.add_argument('-alpha', type=float, dest='alpha', default = .01,
+                        help='alpha level for multiple corrections')
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+    else:
+        args = parser.parse_args()
+        print args
+
 
 datdir = '/home/jagust/UCSF/Manja_Lehmann/ICN/rsfMRI_in_AD/data/extended_cohort_30controls_49AD/graph_theory/Controls'
 correlations = os.path.join(datdir, 'Controls_unmasked_data_fisher.npy')
