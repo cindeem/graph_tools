@@ -1,4 +1,5 @@
 import sys, os
+import time
 import numpy as np
 import statsmodels.stats.api as sms
 import scipy.stats as ss
@@ -134,14 +135,16 @@ def calc_modularity(inmat,  ideal_cost = 0.1):
 
 def save_modularity(datgraph, mod_val, outdir):
     """ saves index values form datgraph and moulatiry value to txt file"""
-    outf = os.path.join(outdir, 'cohort_modularity_index.pkl')
-    pickle.dump(datgraph.index, open(outf, 'w+'))
-    print 'wrote', outf
-    outf = outf.replace('index.pkl', 'value.txt')
-    with open (outf, 'w+') as fid:
+    
+    currtime = time.strftime('%Y-%m-%d-%H-%m')
+    outpkl = os.path.join(outdir, 'cohort_modularity_index_%s.pkl'%currtime)
+    pickle.dump(datgraph.index, open(outpkl, 'w+'))
+    print 'wrote', outpkl
+    outtxt = outtxt.replace('index.pkl', 'value.txt')
+    with open (outtxt, 'w+') as fid:
         fid.write('%f'%mod_val)
-    print 'wrote', outf
-
+    print 'wrote', outtxt
+    return outpkl, outtxt
 
 def load_modularity(datdir, fname = 'cohort_modularity_index.pkl'):
     """ load pre computed module indicies from pickled file"""

@@ -64,7 +64,7 @@ if __name__ == '__main__':
             args.outd, _  = os.path.split(args.infile)
 
         print args
-        boot_main(args.indata, args.outd, 
+        boot_main(args.indata[0], args.outd, 
                   nperms=args.nperm, 
                   pval= args.pval, 
                   alpha= args.alpha)
