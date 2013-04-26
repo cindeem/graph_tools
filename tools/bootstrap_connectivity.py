@@ -31,6 +31,8 @@ def boot_main(indata, outd, nperms=1000, pval=.001, alpha=.01):
                           fname.replace('thresholded', 'thresholded_correl'))
     np.save(outdat, boot_correl)
     cgt.plot_cohort_map(mask, other = boot_correl)
+    fname = outdat.replace('.npy', '.png').replace('thresholded_correl', 'plot')
+    cgt.plt.save(fname)
     print 'saved', outmask, outdat
 
     
