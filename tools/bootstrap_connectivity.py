@@ -17,7 +17,7 @@ def boot_main(indata, outd, nperms=1000, pval=.001, alpha=.01):
     """docstring for boot_main"""
     mask, boot_correl = cgt.boot_corrected_graph(indata,
                                                  nreps=nperms,
-                                                 pval = pval,
+                                                 pthr = pval,
                                                  alpha = alpha)
     
     currtime = time.strftime('%Y-%m-%d-%H-%M')
@@ -64,7 +64,7 @@ if __name__ == '__main__':
             args.outd, _  = os.path.split(args.infile)
 
         print args
-        boot_main(args.indata[0], args.outd, 
+        boot_main(args.infile[0], args.outd, 
                   nperms=args.nperm, 
                   pval= args.pval, 
                   alpha= args.alpha)
