@@ -54,7 +54,7 @@ if __name__ == '__main__':
                         help='pval considered significant\
                              (dafault .001)')
     parser.add_argument('-alpha', type=float, dest='alpha', default = .01,
-                        help='alpha level for multiple corrections')
+                        help='alpha level for multiple corrections (default .01)')
 
     if len(sys.argv) == 1:
         parser.print_help()
