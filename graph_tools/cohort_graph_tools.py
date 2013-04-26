@@ -118,7 +118,7 @@ def calc_modularity(inmat,  ideal_cost = 0.1):
     datgrap.index shows us the components that make up the 
     distinct modules in the network (note ids start at 0, aal count from 1)
     """
-
+    inmat = np.load(inmat)
     G = nx.Graph(weighted=False)
     G = nx.from_numpy_matrix(inmat, G)
     ## fixed config parameters for simulated annealing
