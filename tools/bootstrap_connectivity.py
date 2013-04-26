@@ -30,7 +30,7 @@ def boot_main(indata, outd, nperms=1000, pval=.001, alpha=.01):
     outdat = os.path.join(outd, 
                           fname.replace('thresholded', 'thresholded_correl'))
     np.save(outdat, boot_correl)
-    cgt.plot_chohort_map(mask, other = boot_correl)
+    cgt.plot_cohort_map(mask, other = boot_correl)
     print 'saved', outmask, outdat
 
     

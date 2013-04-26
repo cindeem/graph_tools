@@ -80,11 +80,14 @@ def boot_corrected_graph(indata, nreps = 1000, pthr = .001, alpha = .01):
 
     boot_correl = resampled.mean(0)
     # significance is at .001, correction at alpha
+    ## remove negative correlations
+    boot_correl[boot_correl < 0] = 0
 
     mask = resamp_pvals <= pthr
     mask = mask.sum(0) / np.float(nreps)
     mask[mask < 1-alpha] = 0
     mask[mask >= 1-alpha] = 1
+    mask[boot_correl < 0] = 0
     return mask, boot_correl
 
 
