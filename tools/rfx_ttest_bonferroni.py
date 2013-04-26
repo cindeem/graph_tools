@@ -36,10 +36,19 @@ def main(indata, alpha, save = False):
         pth, fname = os.path.split(indata)
         nme,ext = os.path.splitext(fname)
         curr_time = time.strftime('%Y-%m-%d-%H-%M')
-        newf = os.path.join(pth, 'cohort_graph_' + nme + curr_time + ext)
-        np.save(newf, cmat)
+        newf = os.path.join(pth, 'bonferroni_cohort_mask_' + nme + curr_time + ext)
+        np.save(newf, mask)
+        datf = newf.replace('cohort_mask', 'cohort_correl')
+        avg_data = data.squeeze().mean(0)
+        avg_data[mask == False] = 0
+        np.save(datf, avg_data)
         print 'wrote %s'%(newf)
-    plt.imshow(cmat, cmap= plt.cm.binary_r, interpolation='none')
+
+    plt.subplot(121)
+    plt.imshow(mask , cmap= plt.cm.binary_r, interpolation='none')
+    plt.subplot(122)
+    plt.imshow(avg_data, cmap = 'jet', interpolation = 'none')
+    plt.colorbar()
     plt.title('Group Network corrected at %2s (sparsity = %2.2f)'%(alpha,
                                                                    sparsity * 100))
     plt.show()

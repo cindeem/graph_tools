@@ -26,12 +26,14 @@ if __name__ == '__main__':
 
     parser.add_argument('inmat', type=str, nargs = 1,
                         help = "numpy file holding cohort connectivity\
-                        matricies")
+                        matricies adjacency matrix\
+                        eg bootstrap_thresholded_correl_1000_pval0.001_\
+                        alpha0.01_2013-04-26-10-17_.npy")
     parser.add_argument('inpkl', type = str, nargs = 1,
-                        help = 'pickle file holding netowrk modules')
+                        help = 'pickle file holding network modules')
 
     parser.add_argument('-dim', type = str, default = 'xy', dest = 'dim', 
-                        help 'plane to draw network, xy or yz')
+                        help =  'plane to draw network, xy or yz')
     parser.add_argument('-title', type = str, default = 'graph', 
                         help = 'optional title for figure')
 

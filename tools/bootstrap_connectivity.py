@@ -32,7 +32,7 @@ def boot_main(indata, outd, nperms=1000, pval=.001, alpha=.01):
     np.save(outdat, boot_correl)
     cgt.plot_cohort_map(mask, other = boot_correl)
     fname = outdat.replace('.npy', '.png').replace('thresholded_correl', 'plot')
-    cgt.plt.save(fname)
+    cgt.plt.savefig(fname)
     print 'saved', outmask, outdat
 
     
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     else:
         args = parser.parse_args()
         if args.outd is None:
-            args.outd, _  = os.path.split(args.infile)
+            args.outd, _  = os.path.split(args.infile[0])
 
         print args
         boot_main(args.infile[0], args.outd, 

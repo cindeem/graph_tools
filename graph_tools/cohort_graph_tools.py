@@ -101,7 +101,7 @@ def plot_cohort_map(mask, other = None):
     if other is not None:
         plt.subplot(122)
         
-        plt.imshow(other, cmap= plt.cm.binary_r, interpolation='none')
+        plt.imshow(other, cmap= plt.cm.jet, interpolation='none')
         plt.title('Connectivity')
         plt.colorbar()
         plt.subplot(121)
@@ -149,9 +149,8 @@ def save_modularity(datgraph, mod_val, outdir):
     print 'wrote', outtxt
     return outpkl, outtxt
 
-def load_modularity(datdir, fname = 'cohort_modularity_index.pkl'):
+def load_modularity(infile):
     """ load pre computed module indicies from pickled file"""
-    infile = os.path.join(datdir, fname)
     mod_index = pickle.load(open(infile))
     return mod_index
 
@@ -193,7 +192,10 @@ def gen_node_colors(modules):
 
 def plot_weighted_graph(G, dim = 'xy', node_colors = None, title='graph'):
     """docstring for plot_weighted_graph"""
-    aal_90, labels = parse_aal(dim)
+    pth, _ = os.path.split(__file__)
+    aal_txt = os.path.join(pth, 'tests', 'data', 'aal.txt')
+    aal_coords = os.path.join(pth, 'tests', 'data', 'aal_coords')
+    aal_90, labels = parse_aal(aal_coords, aal_txt, dim = dim)
     if node_colors is None:
         nxplot.draw_graph(G, layout = aal_90, labels = labels)
     else:
