@@ -54,7 +54,7 @@ def world_coords(affine, voxel_coords):
     """calcs world coords given affine and voxel coords"""
     coords = np.ones(len(voxel_coords) + 1)
     coords[:-1] = voxel_coords
-    world_coords = np.dot(aff, coords)
+    world_coords = np.dot(affine, coords)
     return world_coords[:-1]
 
 
